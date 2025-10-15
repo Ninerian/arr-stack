@@ -1,0 +1,122 @@
+version: "3.4"
+services:
+  prowlarr:
+    image: "lscr.io/linuxserver/prowlarr:latest"
+    container_name: prowlarr
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "${ROOT}/config/prowlarr:/config"
+    restart: unless-stopped
+    ports:
+      - "9601:9696" #uncomment if you are not using the VPN
+
+  sonarr:
+    container_name: sonarr
+    image: "lscr.io/linuxserver/sonarr:latest"
+    restart: unless-stopped
+    # network_mode: host
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "${ROOT}/config/sonarr:/config"
+      - "${HDDSTORAGE}:/Media"
+    ports:
+      - 9602:8989
+
+  radarr:
+    container_name: radarr
+    image: "lscr.io/linuxserver/radarr:latest"
+    restart: unless-stopped
+    # network_mode: host
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "${ROOT}/config/radarr:/config"
+      - "${HDDSTORAGE}:/Media"
+    ports:
+      - 9603:7878
+
+  bazarr:
+    container_name: bazarr
+    image: "lscr.io/linuxserver/bazarr:latest"
+    restart: unless-stopped
+    # network_mode: host
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+      - UMASK_SET=022
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "${ROOT}/config/bazarr:/config"
+      - "${HDDSTORAGE}:/Media"
+    ports:
+      - "9604:6767"
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped
+
+  jellyseerr:
+    image: "fallenbagel/jellyseerr:latest"
+    container_name: overseerr
+    environment:
+      - LOG_LEVEL=debug
+      - "TZ=${TZ}"
+    ports:
+      - "9605:5055"
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "${ROOT}/config/jellyseerr:/app/config"
+    restart: unless-stopped
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    # network_mode: host
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - "${ROOT}/config/sabnzb:/config"
+      - "${HDDSTORAGE}:/Media"
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - 9606:8080
+
+  nzbhydra2:
+    image: lscr.io/linuxserver/nzbhydra2:latest
+    container_name: nzbhydra2
+    # network_mode: host
+    environment:
+      - "PUID=${PUID}"
+      - "PGID=${PGID}"
+      - "TZ=${TZ}"
+    ports:
+      - 9607:5076/tcp
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - "${ROOT}/config/nzbhydra2:/config"
+      - "${HDDSTORAGE}:/Media"
+    restart: unless-stopped
