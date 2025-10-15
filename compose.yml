@@ -13,7 +13,7 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "${ROOT}/config/sonarr:/config"
-      - "${PWD}/services/sonarr.xml:/config/config.xml:rw"
+      - "./services/sonarr.xml:/config/config.xml:rw"
       - "${HDDSTORAGE}:/Media"
     ports:
       - 9602:8989
@@ -31,7 +31,7 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "${ROOT}/config/radarr:/config"
-      - "${PWD}/services/radarr.xml:/config/config.xml:rw"
+      - "./services/radarr.xml:/config/config.xml:rw"
       - "${HDDSTORAGE}:/Media"
     ports:
       - 9603:7878
@@ -50,7 +50,7 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "${ROOT}/config/bazarr:/config"
-      - "${PWD}/services/bazarr.yaml:/config/config.yaml:rw"
+      - "./services/bazarr.yaml:/config/config.yaml:rw"
       - "${HDDSTORAGE}:/Media"
     ports:
       - "9604:6767"
@@ -66,7 +66,7 @@ services:
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
       - "${ROOT}/config/jellyseerr:/app/config"
-      - "${PWD}/services/jellyseerr.json:/app/config/settings.json:rw"
+      - "./services/jellyseerr.json:/app/config/settings.json:rw"
     restart: unless-stopped
 
   sabnzbd:
@@ -80,7 +80,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - "${ROOT}/config/sabnzb:/config"
-      - "${PWD}/services/sabnzbd.ini:/config/sabnzbd.ini:rw"
+      - "./services/sabnzbd.ini:/config/sabnzbd.ini:rw"
       - "${HDDSTORAGE}:/Media"
     restart: unless-stopped
     security_opt:
@@ -101,7 +101,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - "${ROOT}/config/nzbhydra2:/config"
-      - "${PWD}/services/nzbhydra.yaml:/config/nzbhydra.yaml:rw"
+      - "./services/nzbhydra.yaml:/config/nzbhydra.yaml:rw"
       - "${HDDSTORAGE}:/Media"
     restart: unless-stopped
 
