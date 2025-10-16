@@ -16,4 +16,4 @@ networks:
 
 
 volumes:
-  configarr
+  configarr:
