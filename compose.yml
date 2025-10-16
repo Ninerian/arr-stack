@@ -11,7 +11,7 @@ services:
       - "TZ=${TZ:-Europe/UTC}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "${ROOT}/config/sonarr:/config"
+      - sonarr:/config
       - "./services/sonarr.xml:/config/config.xml:rw"
       - "${HDDSTORAGE}:/Media"
     ports:
@@ -35,7 +35,7 @@ services:
       - "TZ=${TZ:-Europe/UTC}"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "${ROOT}/config/radarr:/config"
+      - radarr:/config
       - "./services/radarr.xml:/config/config.xml:rw"
       - "${HDDSTORAGE}:/Media"
     ports:
@@ -60,7 +60,7 @@ services:
       - UMASK_SET=022
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "${ROOT}/config/bazarr:/config"
+      - bazarr:/config
       - "./services/bazarr.yaml:/config/config.yaml:rw"
       - "${HDDSTORAGE}:/Media"
     ports:
@@ -82,7 +82,7 @@ services:
       - "9605:5055"
     volumes:
       - "/etc/localtime:/etc/localtime:ro"
-      - "${ROOT}/config/jellyseerr:/app/config"
+      - "jellyseerr:/app/config"
       - "./services/jellyseerr.json:/app/config/settings.json:rw"
     restart: unless-stopped
     healthcheck:
@@ -101,7 +101,7 @@ services:
       - "TZ=${TZ:-Europe/UTC}"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - "${ROOT}/config/sabnzb:/config"
+      - sabnzb:/config
       - "./services/sabnzbd.ini:/config/sabnzbd.ini:rw"
       - "${HDDSTORAGE}:/Media"
     restart: unless-stopped
@@ -127,7 +127,7 @@ services:
       - 9607:5076/tcp
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - "${ROOT}/config/nzbhydra2:/config"
+      - nzbhydra2:/config
       - "./services/nzbhydra.yaml:/config/nzbhydra.yml:rw"
       - "${HDDSTORAGE}:/Media"
     restart: unless-stopped
@@ -141,3 +141,11 @@ services:
 networks:
   configarr:
     name: configarr
+
+volumes:
+  sonarr:
+  radarr:
+  bazarr:
+  jellyseerr:
+  sabnzbd:
+  nzbhydra2:
