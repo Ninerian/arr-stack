@@ -1,16 +1,17 @@
+name: "Configarr update"
 services:
   configarr:
     image: ghcr.io/raydak-labs/configarr:latest
-    networks:
-      - configarr
-    environment:
-      - "PUID=${PUID:-1000}"
-      - "PGID=${PGID:-1000}"
     volumes:
       - ./config:/app/config
       - configarr:/app/repos
       - ./cfs:/app/cfs
       - ./templates:/app/templates
+    environment:
+      - "PUID=${PUID:-1000}"
+      - "PGID=${PGID:-1000}"
+    networks:
+      - configarr
 
 networks:
   configarr:

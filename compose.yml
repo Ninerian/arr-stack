@@ -1,72 +1,25 @@
+name: "Arr-stack"
 services:
-  sonarr:
-    container_name: sonarr
-    image: "lscr.io/linuxserver/sonarr:latest"
-    networks:
-      - configarr
-    restart: unless-stopped
-    environment:
-      - "PUID=${PUID:-1000}"
-      - "PGID=${PGID:-1000}"
-      - "TZ=${TZ:-Europe/UTC}"
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - sonarr:/config
-      - "./services/sonarr.xml:/config/config.xml:rw"
-      - "${HDDSTORAGE}:/Media"
-    ports:
-      - 9602:8989
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8989/ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-  radarr:
-    container_name: radarr
-    image: "lscr.io/linuxserver/radarr:latest"
-    restart: unless-stopped
-    networks:
-      - configarr
-    environment:
-      - "PUID=${PUID:-1000}"
-      - "PGID=${PGID:-1000}"
-      - "TZ=${TZ:-Europe/UTC}"
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - radarr:/config
-      - "./services/radarr.xml:/config/config.xml:rw"
-      - "${HDDSTORAGE}:/Media"
-    ports:
-      - 9603:7878
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:7878/ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
   bazarr:
-    container_name: bazarr
     image: "lscr.io/linuxserver/bazarr:latest"
-    restart: unless-stopped
-    networks:
-      - configarr
+    container_name: bazarr
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - bazarr:/config
+      - ./services/bazarr.yaml:/config/config.yaml:rw
+      - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
       - "PGID=${PGID:-1000}"
       - "TZ=${TZ:-Europe/UTC}"
       - UMASK_SET=022
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - bazarr:/config
-      - "./services/bazarr.yaml:/config/config.yaml:rw"
-      - "${HDDSTORAGE}:/Media"
     ports:
-      - "9604:6767"
+      - '127.0.0.1:9604:6767'
+    networks:
+      - configarr
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:6767/api/system/ping"]
+      test: [ "CMD", "curl", "-f", "http://localhost:6767/api/system/ping" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -75,42 +28,26 @@ services:
   jellyseerr:
     image: "fallenbagel/jellyseerr:latest"
     container_name: jellyseerr
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - jellyseerr:/app/config
+      - ./services/jellyseerr.json:/app/config/settings.json:rw
     environment:
       - LOG_LEVEL=debug
       - "TZ=${TZ:-Europe/UTC}"
     ports:
-      - "9605:5055"
-    volumes:
-      - "/etc/localtime:/etc/localtime:ro"
-      - "jellyseerr:/app/config"
-      - "./services/jellyseerr.json:/app/config/settings.json:rw"
+      - '127.0.0.1:9605:5055'
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5055/api/v1/status"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 40s
-
-  sabnzbd:
-    image: lscr.io/linuxserver/sabnzbd:latest
-    container_name: sabnzbd
-    environment:
-      - "PUID=${PUID:-1000}"
-      - "PGID=${PGID:-1000}"
-      - "TZ=${TZ:-Europe/UTC}"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - sabnzb:/config
-      - "./services/sabnzbd.ini:/config/sabnzbd.ini:rw"
-      - "${HDDSTORAGE}:/Media"
-    restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
-    ports:
-      - 9606:8080
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/api?mode=version"]
+      test:
+        [
+          "CMD",
+          "wget",
+          "--no-verbose",
+          "--tries=1",
+          "--spider",
+          "http://localhost:5055/api/v1/status"
+        ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -119,20 +56,91 @@ services:
   nzbhydra2:
     image: lscr.io/linuxserver/nzbhydra2:latest
     container_name: nzbhydra2
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - nzbhydra2:/config
+      - ./services/nzbhydra.yaml:/config/nzbhydra.yml:rw
+      - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
       - "PGID=${PGID:-1000}"
       - "TZ=${TZ:-Europe/UTC}"
     ports:
-      - 9607:5076/tcp
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - nzbhydra2:/config
-      - "./services/nzbhydra.yaml:/config/nzbhydra.yml:rw"
-      - "${HDDSTORAGE}:/Media"
+      - '127.0.0.1:9607:5076/tcp'
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5076/actuator/health"]
+      test: [ "CMD", "curl", "-f", "http://localhost:5076/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  radarr:
+    image: "lscr.io/linuxserver/radarr:latest"
+    container_name: radarr
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - radarr:/config
+      - ./services/radarr.xml:/config/config.xml:rw
+      - ${HDDSTORAGE}:/Media
+    environment:
+      - "PUID=${PUID:-1000}"
+      - "PGID=${PGID:-1000}"
+      - "TZ=${TZ:-Europe/UTC}"
+    ports:
+      - '127.0.0.1:9603:7878'
+    networks:
+      - configarr
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:7878/ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  sabnzbd:
+    image: lscr.io/linuxserver/sabnzbd:latest
+    container_name: sabnzbd
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - sabnzbd:/config
+      - ./services/sabnzbd.ini:/config/sabnzbd.ini:rw
+      - ${HDDSTORAGE}:/Media
+    environment:
+      - "PUID=${PUID:-1000}"
+      - "PGID=${PGID:-1000}"
+      - "TZ=${TZ:-Europe/UTC}"
+    ports:
+      - '127.0.0.1:9606:8080'
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/api?mode=version" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    security_opt:
+      - no-new-privileges:true
+  sonarr:
+    image: "lscr.io/linuxserver/sonarr:latest"
+    container_name: sonarr
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - sonarr:/config
+      - ./services/sonarr.xml:/config/config.xml:rw
+      - ${HDDSTORAGE}:/Media
+    environment:
+      - "PUID=${PUID:-1000}"
+      - "PGID=${PGID:-1000}"
+      - "TZ=${TZ:-Europe/UTC}"
+    ports:
+      - '127.0.0.1:9602:8989'
+    networks:
+      - configarr
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8989/ping" ]
       interval: 30s
       timeout: 10s
       retries: 3
