@@ -128,7 +128,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - "${ROOT}/config/nzbhydra2:/config"
-      - "./services/nzbhydra.yaml:/config/nzbhydra.yaml:rw"
+      - "./services/nzbhydra.yaml:/config/nzbhydra.yml:rw"
       - "${HDDSTORAGE}:/Media"
     restart: unless-stopped
     healthcheck:
