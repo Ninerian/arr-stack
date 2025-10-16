@@ -6,7 +6,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - bazarr:/config
-      - ./services/bazarr.yaml:/config/config.yaml:rw
+      - ./services/bazarr.yaml:/config/config.yaml:delegated
       - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
@@ -31,7 +31,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - jellyseerr:/app/config
-      - ./services/jellyseerr.json:/app/config/settings.json:rw
+      - ./services/jellyseerr.json:/app/config/settings.json:delegated
     environment:
       - LOG_LEVEL=debug
       - "TZ=${TZ:-Europe/UTC}"
@@ -59,7 +59,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - nzbhydra2:/config
-      - ./services/nzbhydra.yaml:/config/nzbhydra.yml:rw
+      - ./services/nzbhydra.yaml:/config/nzbhydra.yml:delegated
       - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
@@ -81,7 +81,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - radarr:/config
-      - ./services/radarr.xml:/config/config.xml:rw
+      - ./services/radarr.xml:/config/config.xml:delegated
       - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
@@ -105,7 +105,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - sabnzbd:/config
-      - ./services/sabnzbd.ini:/config/sabnzbd.ini:rw
+      - ./services/sabnzbd.ini:/config/sabnzbd.ini:delegated
       - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
@@ -128,7 +128,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - sonarr:/config
-      - ./services/sonarr.xml:/config/config.xml:rw
+      - ./services/sonarr.xml:/config/config.xml:delegated
       - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
