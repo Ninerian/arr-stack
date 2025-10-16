@@ -5,7 +5,7 @@ services:
       - configarr
     volumes:
       - ./config:/app/config
-      - ./tmp/dockerrepos:/app/repos
+      - configarr/dockerrepos:/app/repos
       - ./cfs:/app/cfs
       - ./templates:/app/templates
 
@@ -13,3 +13,7 @@ networks:
   configarr:
     name: configarr
     external: true
+
+
+volumes:
+  configarr
