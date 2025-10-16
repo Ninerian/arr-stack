@@ -296,7 +296,7 @@ categoriesConfig:
   defaultCategory: "All"
 downloading:
   downloaders:
-  - apiKey: "102041ef125642f5802159c9621c253a"
+  - apiKey: "219b6ddc738f4c0296dfd5a8364111f8"
     defaultCategory: null
     downloadType: "NZB"
     enabled: true
