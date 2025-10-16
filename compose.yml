@@ -59,7 +59,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - nzbhydra2:/config
-      - ./services/nzbhydra.yaml:/config/nzbhydra.yml:delegated
+      # - ./services/nzbhydra.yaml:/config/nzbhydra.yml:delegated
       - ${HDDSTORAGE}:/Media
     environment:
       - "PUID=${PUID:-1000}"
